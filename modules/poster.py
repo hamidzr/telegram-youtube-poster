@@ -43,4 +43,3 @@ class Poster():
         print(e)
         print('error ', id)
         return False
-

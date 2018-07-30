@@ -1,4 +1,5 @@
 import pafy
+import re
 import os
 
 def download_video(id):
@@ -18,4 +19,17 @@ def download_video(id):
   video.videoPath = '/tmp/' + id + '.mp4'
   return video
 
+def isValidYtUrl(string):
+  match = re.match(r'^(http(s)?:\/\/)?((w){3}.)?youtu(be|.be)?(\.com)?\/.+', string)
+  return match
 
+def idFromYtUrl(url):
+  regex = re.compile(r'(https?://)?(www\.)?(youtube|youtu|youtube-nocookie)\.(com|be)/(watch\?v=|embed/|v/|.+\?v=)?(?P<id>[A-Za-z0-9\-=_]{11})')
+  match = regex.match(url)
+  if not match:
+      print('no match')
+  print(match.group('id'))
+  return match.group('id')
+
+if __name__ == '__main__':
+  idFromYtUrl('https://www.youtube.com/watch?v=xI99blNzaKs')

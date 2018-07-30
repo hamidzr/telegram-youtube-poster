@@ -23,22 +23,22 @@ class Poster():
     self.bot.sendPhoto(chat_id=self.TARGET_CHANNEL, **kwargs)
 
   def sendVideo(self, **kwargs):
-    self.bot.sendPhoto(chat_id=self.TARGET_CHANNEL, **kwargs)
+    self.bot.sendVideo(chat_id=self.TARGET_CHANNEL, **kwargs)
 
 
-  def sendYoutubeVideo(self, id):
+  def sendYoutubeVideo(self, id, image_caption=None, video_caption=None):
     video = download_video(id)
     if video:
       try:
         with open(video.thumbPath,'rb') as photoFile:
           print('sending photo', video.thumbPath)
-          caption = video.title[:45] + ' .. ' +  video.description[:140]
-          self.sendPhoto(photo=photoFile, caption=caption , disable_notification= True)
+          imageCaption = image_caption if image_caption else  video.title[:45] + ' .. ' +  video.description[:140]
+          self.sendPhoto(photo=photoFile, caption=imageCaption , disable_notification= True)
         with open(video.videoPath,'rb') as videoFile:
           print('sending video', video.videoPath)
-          caption =  video.title[:150] + ' @freetube'
-          self.sendVideo(video=videoFile, caption=caption , duration=video.length, disable_notification= True, timeout=150)
-          return video
+          videoCaption =  video_caption if video_caption else  video.title[:150] + ' @freetube'
+          self.sendVideo(video=videoFile, caption=videoCaption , duration=video.length, disable_notification= True, timeout=150)
+        return video
       except Exception as e:
         print(e)
         print('error ', id)

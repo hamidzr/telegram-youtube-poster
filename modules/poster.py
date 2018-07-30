@@ -37,7 +37,7 @@ class Poster():
         with open(video.videoPath,'rb') as videoFile:
           print('sending video', video.videoPath)
           videoCaption =  video_caption if video_caption else  video.title[:150] + ' @freetube'
-          self.sendVideo(video=videoFile, caption=videoCaption , duration=video.length, disable_notification= True, timeout=150)
+          self.sendVideo(video=videoFile, caption=videoCaption , duration=video.length, disable_notification= True, timeout=300) # wait up to 5 min for upload
         return video
       except Exception as e:
         print(e)

@@ -2,19 +2,16 @@
 # -*- coding: utf-8 -*-
 # encoding=utf8
 
-
-
 import logging
 import telegram
 from telegram.error import NetworkError, Unauthorized
 from time import sleep
-import os
 import requests
 import json
 import sys
-import pafy
 import datetime
 import configparser
+from modules.youtube import *
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -64,25 +61,14 @@ def main():
   for idx, res in enumerate(trendsJson['items']):
     id = res['id']
     try:
-      video = pafy.new("https://www.youtube.com/watch?v={}".format(id))
-      print(idx + 1, video.title, id)
-      # title = res['snippet']['title']
-      # thumbnail = res['snippet']['thumbnails']['standard']['url']
-      # duration = res['contentDetails']['duration'][2:]
-      # print(str(idx+1),title,duration,thumbnail)
-
-      # get download the video and get status
-      os.system('wget -q {} -O /tmp/{}.jpg'.format(video.bigthumbhd,id))
-      status = os.system('youtube-dl -q -f 18,36 --max-filesize 45m --output "/tmp/%(id)s.mp4"  -- {}'.format(id))
-      if status == 0:
-        fileAddress= ('/tmp/' + id + '.jpg')
-        print(fileAddress)
-        with open(fileAddress,'rb') as photoFile:
+      video = download_video(id)
+      if video:
+        print(video.thumbPath)
+        with open(video.thumbPath,'rb') as photoFile:
           print('sending photo')
           bot.sendPhoto(chat_id= TARGET_CHANNEL, photo=photoFile, caption= video.title[:45] + ' .. ' +  video.description[:140], disable_notification= True)
-        fileAddress= ('/tmp/' + id + '.mp4')
-        print(fileAddress)
-        with open(fileAddress,'rb') as videoFile:
+        print(video.videoPath)
+        with open(video.videoPath,'rb') as videoFile:
           print('sending video')
           bot.sendVideo(chat_id= TARGET_CHANNEL, video=videoFile, caption= video.title[:150] + ' @freetube' , duration=video.length, disable_notification= True, timeout=150)
     except Exception as e:

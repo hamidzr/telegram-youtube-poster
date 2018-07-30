@@ -9,8 +9,14 @@ import json
 import sys
 import datetime
 import configparser
+import argparse
 from modules.youtube import *
 from modules.poster import *
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--id", help="youtube video id to post")
+args = parser.parse_args()
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -37,14 +43,19 @@ def getTrends():
 def main():
   logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-  date = datetime.date.today().strftime('%d, %b %Y')
-  bot.sendMessage(text= "Top trending youtube videos for {}".format(date))
+  if (args.id):
+    bot.sendYoutubeVideo(args.id)
 
-  # search youtube and create a list of urls
-  trendsJson = getTrends();
-  for idx, res in enumerate(trendsJson['items']):
-    id = res['id']
-    bot.sendYoutubeVideo(id)
+  else:
+    print('posting trending youtube videos')
+    date = datetime.date.today().strftime('%d, %b %Y')
+    bot.sendMessage(text= "Top trending youtube videos for {}".format(date))
+
+    # search youtube and create a list of urls
+    trendsJson = getTrends();
+    for idx, res in enumerate(trendsJson['items']):
+      id = res['id']
+      bot.sendYoutubeVideo(id)
 
 if __name__ == '__main__':
   main()

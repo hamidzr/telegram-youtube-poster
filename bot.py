@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#! env python3
 # -*- coding: utf-8 -*-
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters

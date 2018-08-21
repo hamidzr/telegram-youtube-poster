@@ -41,10 +41,12 @@ def echo(bot, update):
     """Echo the user message."""
     # if there is a youtubeid then dl
     msg = update.message.text
-    if (isValidYtUrl(msg)):
-        id = idFromYtUrl(msg)
+    ytUrl = hasYtUrl(msg)
+    if (ytUrl):
+        id = idFromYtUrl(ytUrl)
+        update.message.reply_text(f'Request for youtube video: {id} received. Processing..')
         posterBot.sendYoutubeVideo(id)
-        update.message.reply_text('video posted to @freetube')
+        update.message.reply_text(f'Video posted to #{id} @freetube')
     else:
         update.message.reply_text(msg)
 
@@ -67,6 +69,7 @@ def main():
     dp.add_handler(CommandHandler("help", help))
 
     # on noncommand i.e message - echo the message on Telegram
+    # TODO add a separate message handler for yt
     dp.add_handler(MessageHandler(Filters.text, echo))
 
     # log all errors

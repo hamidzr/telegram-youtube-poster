@@ -33,11 +33,12 @@ class Poster():
         with open(video.thumbPath,'rb') as photoFile:
           print('sending photo', video.thumbPath)
           imageCaption = image_caption if image_caption else  video.title[:45] + ' .. ' +  video.description[:140]
-          self.sendPhoto(photo=photoFile, caption=imageCaption , disable_notification= True)
+          self.sendPhoto(photo=photoFile, caption=imageCaption , disable_notification=True)
         with open(video.videoPath,'rb') as videoFile:
           print('sending video', video.videoPath)
           videoCaption =  video_caption if video_caption else  video.title[:150] + ' @freetube'
-          self.sendVideo(video=videoFile, caption=videoCaption , duration=video.length, disable_notification= True, timeout=300) # wait up to 5 min for upload
+          self.sendVideo(video=videoFile, caption=videoCaption , duration=video.length,
+                         disable_notification=False, timeout=300) # wait up to 5 min for upload
         return video
       except Exception as e:
         print(e)

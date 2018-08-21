@@ -23,6 +23,13 @@ def isValidYtUrl(string):
   match = re.match(r'^(http(s)?:\/\/)?((w){3}.)?youtu(be|.be)?(\.com)?\/.+', string)
   return match
 
+# searches the string for youtube url
+def hasYtUrl(string):
+  match = re.search(r'(http(s)?:\/\/)?((w){3}.)?youtu(be|.be)?(\.com)?\/.+', string)
+  if (match):
+    return match[0]
+  return None
+
 def idFromYtUrl(url):
   regex = re.compile(r'(https?://)?(www\.)?(youtube|youtu|youtube-nocookie)\.(com|be)/(watch\?v=|embed/|v/|.+\?v=)?(?P<id>[A-Za-z0-9\-=_]{11})')
   match = regex.match(url)
@@ -32,4 +39,5 @@ def idFromYtUrl(url):
   return match.group('id')
 
 if __name__ == '__main__':
+  res = hasYtUrl('golasdibasdf;alsd kasldfjhttps://www.youtube.com/watch?v=xI99blNzaKs')
   idFromYtUrl('https://www.youtube.com/watch?v=xI99blNzaKs')
